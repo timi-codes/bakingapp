@@ -13,8 +13,8 @@ import java.util.List;
 public class Recipe implements Parcelable {
     private Integer id,servings;
     private String name,image;
-    private ArrayList<Ingredient>  ingredient = null;
-    private ArrayList<Step> step = null;
+    private ArrayList<Ingredient>  ingredients = null;
+    private ArrayList<Step> steps = null;
 
     public int getId() {
         return id;
@@ -48,20 +48,20 @@ public class Recipe implements Parcelable {
         this.servings = servings;
     }
 
-    public List<Ingredient> getIngredientList() {
-        return ingredient;
+    public ArrayList<Ingredient> getIngredientList() {
+        return ingredients;
     }
 
     public void setIngredientList(ArrayList<Ingredient> ingredientList) {
-        this.ingredient = ingredientList;
+        this.ingredients = ingredientList;
     }
 
     public ArrayList<Step> getStepList() {
-        return step;
+        return steps;
     }
 
     public void setStepList(ArrayList<Step> stepList) {
-        this.step = stepList;
+        this.steps = stepList;
     }
 
 
@@ -69,16 +69,16 @@ public class Recipe implements Parcelable {
         id = in.readByte() == 0x00 ? null : in.readInt();
         name = in.readString();
         if (in.readByte() == 0x01) {
-            ingredient = new ArrayList<>();
-            in.readList(ingredient, Ingredient.class.getClassLoader());
+            ingredients = new ArrayList<>();
+            in.readList(ingredients, Ingredient.class.getClassLoader());
         } else {
-            ingredient = null;
+            ingredients = null;
         }
         if (in.readByte() == 0x01) {
-            step = new ArrayList<>();
-            in.readList(step, Step.class.getClassLoader());
+            steps = new ArrayList<>();
+            in.readList(steps, Step.class.getClassLoader());
         } else {
-            step = null;
+            steps = null;
         }
         servings = in.readByte() == 0x00 ? null : in.readInt();
         image = in.readString();
@@ -110,17 +110,17 @@ public class Recipe implements Parcelable {
             dest.writeInt(id);
         }
         dest.writeString(name);
-        if (ingredient == null) {
+        if (ingredients == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(ingredient);
+            dest.writeList(ingredients);
         }
-        if (step == null) {
+        if (steps == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(step);
+            dest.writeList(steps);
         }
         if (servings == null) {
             dest.writeByte((byte) (0x00));

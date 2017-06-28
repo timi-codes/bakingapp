@@ -7,5 +7,6 @@
     <dimen name="card_view">8dp</dimen>
     <dimen name="card_elevation">8dp</dimen>
     <dimen name="card_corner">5dp</dimen>
+    <dimen name="app_bar_height">48dp</dimen>
 
 </resources>
