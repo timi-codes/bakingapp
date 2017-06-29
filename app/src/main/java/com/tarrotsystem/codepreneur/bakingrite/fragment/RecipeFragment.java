@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.tarrotsystem.codepreneur.bakingrite.MainActivity;
 import com.tarrotsystem.codepreneur.bakingrite.R;
-import com.tarrotsystem.codepreneur.bakingrite.RecipeAdapter;
+import com.tarrotsystem.codepreneur.bakingrite.adapter.RecipeAdapter;
 import com.tarrotsystem.codepreneur.bakingrite.model.Recipe;
 import com.tarrotsystem.codepreneur.bakingrite.utils.RecipesEndpoint;
 import com.tarrotsystem.codepreneur.bakingrite.utils.RetrofitBuilder;
@@ -52,7 +52,7 @@ public class RecipeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.recipe_recyclerview,container,false);
+        View rootView = inflater.inflate(R.layout.recipe_list_fragment,container,false);
 
         ButterKnife.bind(this,rootView);
 

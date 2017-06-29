@@ -1,4 +1,4 @@
-package com.tarrotsystem.codepreneur.bakingrite;
+package com.tarrotsystem.codepreneur.bakingrite.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,8 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.tarrotsystem.codepreneur.bakingrite.R;
 import com.tarrotsystem.codepreneur.bakingrite.model.Ingredient;
 import com.tarrotsystem.codepreneur.bakingrite.model.Recipe;
+import com.tarrotsystem.codepreneur.bakingrite.utils.RecipeUtils;
 
 import java.util.ArrayList;
 
@@ -51,7 +53,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         holder.txtRecipeName.setText(mRecipes.get(position).getName());
 
-        Picasso.with(mContext).load(getImageByPosition(position)).into(holder.txtRecipeImage);
+        Picasso.with(mContext).load(RecipeUtils.getImageById(mRecipes.get(position).getId())).into(holder.txtRecipeImage);
 
         StringBuilder sb = new StringBuilder(5);
         ArrayList<Ingredient> ingredients = mRecipes.get(position).getIngredientList();
@@ -96,18 +98,4 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
         }
     }
 
-    private int getImageByPosition(int position) {
-        switch (position) {
-            case 0:
-                return R.drawable.nutellapie;
-            case 1:
-                return R.drawable.brownies;
-            case 2:
-                return R.drawable.yellowcake;
-            case 3:
-                return R.drawable.cheesecake;
-            default:
-                return R.drawable.recipe_placeholder;
-        }
-    }
 }

@@ -5,16 +5,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import com.tarrotsystem.codepreneur.bakingrite.fragment.RecipeDetailFragment;
+import com.tarrotsystem.codepreneur.bakingrite.adapter.RecipeAdapter;
 import com.tarrotsystem.codepreneur.bakingrite.model.Recipe;
 
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.tarrotsystem.codepreneur.bakingrite.DetailActivity.SELECTED_RECIPES;
+
 public class MainActivity extends AppCompatActivity implements RecipeAdapter.RecipeClickListener{
 
-    public static  String TAG = "com.tarrotsystem.codepreneur.bakingrite.MainActivity";
     @BindView(R.id.my_toolbar)
     Toolbar toolbar;
 
@@ -29,8 +32,14 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     @Override
     public void onClick(Recipe clickedItemIndex) {
 
-        final Intent intent = new Intent(this, RecipeDetailFragment.class);
-        intent.putExtra(DetailActivity.DETAIL_TAG,clickedItemIndex);
+        ArrayList<Recipe> selectedRecipe = new ArrayList<>();
+        selectedRecipe.add(clickedItemIndex);
+
+        Bundle selectedRecipeBundle = new Bundle();
+        selectedRecipeBundle.putParcelableArrayList(SELECTED_RECIPES,selectedRecipe);
+
+        final Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtras(selectedRecipeBundle);
         startActivity(intent);
     }
 }
