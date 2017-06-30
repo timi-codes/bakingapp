@@ -40,7 +40,7 @@
                         android:textSize="60sp"
                         android:alpha="0.6"
                         android:textStyle="bold"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center|center_horizontal"
                         android:textColor="@android:color/white" />
                 </FrameLayout>
 

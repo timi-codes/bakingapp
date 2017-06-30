@@ -32,7 +32,7 @@ public class RecipeStepAdapter  extends RecyclerView.Adapter<RecipeStepAdapter.R
         }
 
         public interface RecipeClickListener {
-            void onClick(Step clickedItemIndex);
+            void onClick(ArrayList<Step> allSteps,int selectedItem);
         }
 
         public void setStepsRecipeData(ArrayList<Step> steps, Context context) {
@@ -76,7 +76,7 @@ public class RecipeStepAdapter  extends RecyclerView.Adapter<RecipeStepAdapter.R
             ImageView stepImage;
 
 
-            public RecyclerViewHolder(View itemView) {
+            public RecyclerViewHolder(final View itemView) {
                 super(itemView);
 
                 ButterKnife.bind(this, itemView);
@@ -84,7 +84,7 @@ public class RecipeStepAdapter  extends RecyclerView.Adapter<RecipeStepAdapter.R
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.onClick(mSteps.get(getLayoutPosition()));
+                        mListener.onClick(mSteps,getAdapterPosition());
                     }
                 });
             }

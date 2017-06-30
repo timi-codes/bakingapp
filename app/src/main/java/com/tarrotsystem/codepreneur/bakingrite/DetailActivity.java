@@ -1,29 +1,18 @@
 package com.tarrotsystem.codepreneur.bakingrite;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.TextView;
+
 
 import com.tarrotsystem.codepreneur.bakingrite.adapter.RecipeStepAdapter;
 import com.tarrotsystem.codepreneur.bakingrite.fragment.RecipeDetailFragment;
-import com.tarrotsystem.codepreneur.bakingrite.model.Ingredient;
+import com.tarrotsystem.codepreneur.bakingrite.fragment.RecipeStepDetailFragment;
 import com.tarrotsystem.codepreneur.bakingrite.model.Recipe;
 import com.tarrotsystem.codepreneur.bakingrite.model.Step;
-import com.tarrotsystem.codepreneur.bakingrite.utils.RecipeUtils;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -33,23 +22,19 @@ import butterknife.ButterKnife;
  * Created by codepreneur on 6/27/17.
  */
 
-public class DetailActivity extends AppCompatActivity implements RecipeStepAdapter.RecipeClickListener{
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.backdrop)
-    ImageView recipeImage;
-
-    @BindView(R.id.collapsingtbl)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-
-    @BindView(R.id.btnIngredients)
-    FloatingActionButton floatingActionButton;
-
+public class DetailActivity extends AppCompatActivity implements RecipeStepAdapter.RecipeClickListener, RecipeStepDetailFragment.RecipeClickListener {
 
     public static String SELECTED_RECIPES = "SelectedRecipes";
+    public static String SELECTED_STEPS = "SelectedSteps";
+    public static String SELECTED_INDEX = "SelectedIndex";
+
+
     private ArrayList<Recipe> recipe = new ArrayList<>();
-    private String recipeName;
+    public String recipeName;
+
+    @Nullable
+    @BindView(R.id.my_toolbar)
+    Toolbar toolbar;
 
 
     @Override
@@ -57,65 +42,91 @@ public class DetailActivity extends AppCompatActivity implements RecipeStepAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             Bundle selectedRecipe = getIntent().getExtras();
             recipe = selectedRecipe.getParcelableArrayList(SELECTED_RECIPES);
-            recipeName = recipe.get(0).getName();
 
-            final RecipeDetailFragment fragment = new RecipeDetailFragment();
-            fragment.setArguments(selectedRecipe);
+            final RecipeDetailFragment firstfragment = new RecipeDetailFragment();
+            firstfragment.setArguments(selectedRecipe);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
+                    .replace(R.id.fragment_container, firstfragment)
                     .commit();
 
-        }
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(recipeName);
-        collapsingToolbarLayout.setTitle(recipeName);
-        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.white));
+            if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
 
-        recipeImage.setImageDrawable(getResources().getDrawable(RecipeUtils.getImageById(recipe.get(0).getId())));
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setupDialog();
+                final RecipeStepDetailFragment secondfragment = new RecipeStepDetailFragment();
+                secondfragment.setArguments(selectedRecipe);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container2, secondfragment)
+                        .commit();
             }
-        });
+        } else {
+            recipe = savedInstanceState.getParcelableArrayList(SELECTED_RECIPES);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            final RecipeDetailFragment firstfragment = new RecipeDetailFragment();
+            firstfragment.setArguments(savedInstanceState);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, firstfragment)
+                    .commit();
+
+            if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
+                final RecipeStepDetailFragment secondfragment = new RecipeStepDetailFragment();
+                secondfragment.setArguments(savedInstanceState);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container2, secondfragment)
+                        .commit();
+            }
+
+        }
+        recipeName = recipe.get(0).getName();
+
+        if (toolbar!=null){
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("How To Make " + recipeName + " Recipe");
+        }
+
     }
 
-    private void setupDialog(){
-       /* dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_LEFT_ICON);
-        dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_ingredients);
-        dialog.setContentView(R.layout.custom_dialog);
-        dialog.setTitle("You Need");
-        dialog.*/
-        LayoutInflater inflater = LayoutInflater.from(this);;
-         View dialogueLayout = inflater.inflate(R.layout.custom_dialog, null);
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setView(dialogueLayout);
-        builder.setTitle("You Need");
-        builder.setIcon(R.drawable.ic_ingredients);
-        builder.setPositiveButton("OK",null).create()
-                .show();
 
-        final TextView ingredient = (TextView)dialogueLayout.findViewById(R.id.ingredient);
+    @Override
+    public void onClick(ArrayList<Step> steps, int selectedItemIndex) {
+        RecipeStepDetailFragment fragment = new RecipeStepDetailFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        ArrayList<Ingredient> ingredients = recipe.get(0).getIngredientList();
+        Bundle stepBundle = new Bundle();
+        stepBundle.putParcelableArrayList(SELECTED_STEPS, steps);
+        stepBundle.putParcelableArrayList(SELECTED_RECIPES, recipe);
+        stepBundle.putInt(SELECTED_INDEX, selectedItemIndex);
+        stepBundle.putString("Title", recipeName);
+        fragment.setArguments(stepBundle);
 
-        for(Ingredient a: ingredients){
-            ingredient.append("\u2022  "+ a.getQuantity().toString());
-            ingredient.append(a.getMeasure());
-            ingredient.append(" of "+a.getIngredient()+"\n\n");
+        if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container2, fragment)
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment).addToBackStack(null)
+                    .commit();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(SELECTED_RECIPES, recipe);
 
     }
 
     @Override
-    public void onClick(Step clickedItemIndex) {
-
+    public void onBackPressed() {
+        super.onBackPressed();
+         if(getFragmentManager().getBackStackEntryCount() > 0){
+            getFragmentManager().popBackStack();
+        }
     }
 }
