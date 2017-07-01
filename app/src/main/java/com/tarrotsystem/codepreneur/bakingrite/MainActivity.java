@@ -1,6 +1,10 @@
 package com.tarrotsystem.codepreneur.bakingrite;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.test.espresso.IdlingResource;
+import android.support.test.espresso.core.deps.guava.annotations.VisibleForTesting;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.tarrotsystem.codepreneur.bakingrite.adapter.RecipeAdapter;
 import com.tarrotsystem.codepreneur.bakingrite.model.Recipe;
+import com.tarrotsystem.codepreneur.bakingrite.utils.SimpleIdlingResource;
 
 
 import java.util.ArrayList;
@@ -21,6 +26,21 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
 
     @BindView(R.id.my_toolbar)
     Toolbar toolbar;
+
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
+
+    /**
+     * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

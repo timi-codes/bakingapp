@@ -21,6 +21,7 @@ import com.tarrotsystem.codepreneur.bakingrite.adapter.RecipeAdapter;
 import com.tarrotsystem.codepreneur.bakingrite.model.Recipe;
 import com.tarrotsystem.codepreneur.bakingrite.utils.RecipesEndpoint;
 import com.tarrotsystem.codepreneur.bakingrite.utils.RetrofitBuilder;
+import com.tarrotsystem.codepreneur.bakingrite.widget.BakingAppIntentService;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;

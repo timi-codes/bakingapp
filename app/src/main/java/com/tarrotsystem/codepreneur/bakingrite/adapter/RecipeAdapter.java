@@ -13,6 +13,7 @@ import com.tarrotsystem.codepreneur.bakingrite.R;
 import com.tarrotsystem.codepreneur.bakingrite.model.Ingredient;
 import com.tarrotsystem.codepreneur.bakingrite.model.Recipe;
 import com.tarrotsystem.codepreneur.bakingrite.utils.RecipeUtils;
+import com.tarrotsystem.codepreneur.bakingrite.widget.BakingAppIntentService;
 
 import java.util.ArrayList;
 
@@ -40,6 +41,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
         this.mRecipes = recipes;
         this.mContext = context;
         notifyDataSetChanged();
+        BakingAppIntentService.startBakingService(context,mRecipes);
     }
 
     @Override
