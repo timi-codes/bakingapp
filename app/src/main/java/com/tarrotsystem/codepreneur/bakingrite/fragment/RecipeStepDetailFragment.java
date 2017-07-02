@@ -203,14 +203,19 @@ public class RecipeStepDetailFragment extends Fragment {
         if (videoUrl.isEmpty()){
             player = null;
             mPlayerView.setForeground(ContextCompat.getDrawable(getContext(), R.drawable.ic_video_error));
-            //mPlayerView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300));
         }else {
             initializePlayer(Uri.parse(videoUrl));
             if (isLandscapeMode(getContext())){
                description.setVisibility(View.GONE);
-                bottomNavigationView.setVisibility(View.GONE);
-                collapsingToolbarLayout.setTitle(" ");
-                nestedScrollView.setVisibility(View.GONE);
+
+                if (bottomNavigationView!=null)
+                    bottomNavigationView.setVisibility(View.GONE);
+
+                if (collapsingToolbarLayout!=null)
+                    collapsingToolbarLayout.setTitle(" ");
+
+                if (nestedScrollView!=null)
+                    nestedScrollView.setVisibility(View.GONE);
             }
 
         }

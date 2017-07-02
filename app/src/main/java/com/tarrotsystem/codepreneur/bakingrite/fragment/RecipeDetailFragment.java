@@ -1,6 +1,7 @@
 package com.tarrotsystem.codepreneur.bakingrite.fragment;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.tarrotsystem.codepreneur.bakingrite.DetailActivity;
 import com.tarrotsystem.codepreneur.bakingrite.R;
 import com.tarrotsystem.codepreneur.bakingrite.adapter.RecipeStepAdapter;
@@ -59,6 +61,10 @@ public class RecipeDetailFragment extends Fragment {
     FloatingActionButton floatingActionButton;
 
     private String recipeName;
+    private LinearLayoutManager linearLayoutManager;
+    private Parcelable mListState;
+    private static String LIST_STATE_KEY = "recycleposition";
+
 
 
     public RecipeDetailFragment() {
@@ -70,6 +76,8 @@ public class RecipeDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (savedInstanceState!=null){
             recipes = savedInstanceState.getParcelableArrayList(SELECTED_RECIPES);
+            mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+
         }else{
             recipes = getArguments().getParcelableArrayList(SELECTED_RECIPES);
         }
@@ -87,7 +95,12 @@ public class RecipeDetailFragment extends Fragment {
             collapsingToolbarLayout.setTitle(recipeName);
             collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.white));
 
-            recipeImage.setImageDrawable(getResources().getDrawable(RecipeUtils.getImageById(recipes.get(0).getId())));
+            if (recipes.get(0).getImage().isEmpty()){
+                Picasso.with(getContext()).load(RecipeUtils.getImageById(recipes.get(0).getId())).into(recipeImage);
+            }else{
+                Picasso.with(getContext()).load(recipes.get(0).getImage()).into(recipeImage);
+            }
+
             floatingActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -97,7 +110,7 @@ public class RecipeDetailFragment extends Fragment {
         }
 
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager = new LinearLayoutManager(getContext());
         stepsRecycler.setLayoutManager(linearLayoutManager);
         recipeStepAdapter = new RecipeStepAdapter((DetailActivity)getActivity());
         stepsRecycler.setAdapter(recipeStepAdapter);
@@ -130,5 +143,26 @@ public class RecipeDetailFragment extends Fragment {
     public void onSaveInstanceState(Bundle currentState) {
         super.onSaveInstanceState(currentState);
         currentState.putParcelableArrayList(SELECTED_RECIPES, recipes);
+        // Save list state
+        mListState = linearLayoutManager.onSaveInstanceState();
+        currentState.putParcelable(LIST_STATE_KEY, mListState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // Retrieve list state and list/item positions
+        if(savedInstanceState != null)
+            mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mListState != null) {
+            linearLayoutManager.onRestoreInstanceState(mListState);
+        }
     }
 }

@@ -51,11 +51,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
         return new RecyclerViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         holder.txtRecipeName.setText(mRecipes.get(position).getName());
 
-        Picasso.with(mContext).load(RecipeUtils.getImageById(mRecipes.get(position).getId())).into(holder.txtRecipeImage);
+        if (mRecipes.get(position).getImage().isEmpty()){
+            Picasso.with(mContext).load(RecipeUtils.getImageById(mRecipes.get(position).getId())).into(holder.txtRecipeImage);
+        }else{
+            Picasso.with(mContext).load(mRecipes.get(position).getImage()).into(holder.txtRecipeImage);
+        }
+
+
 
         StringBuilder sb = new StringBuilder(5);
         ArrayList<Ingredient> ingredients = mRecipes.get(position).getIngredientList();

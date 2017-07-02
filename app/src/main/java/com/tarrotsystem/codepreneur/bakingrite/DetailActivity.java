@@ -13,6 +13,7 @@ import com.tarrotsystem.codepreneur.bakingrite.fragment.RecipeDetailFragment;
 import com.tarrotsystem.codepreneur.bakingrite.fragment.RecipeStepDetailFragment;
 import com.tarrotsystem.codepreneur.bakingrite.model.Recipe;
 import com.tarrotsystem.codepreneur.bakingrite.model.Step;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -43,24 +44,27 @@ public class DetailActivity extends AppCompatActivity implements RecipeStepAdapt
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
         if (savedInstanceState == null) {
-            Bundle selectedRecipe = getIntent().getExtras();
-            recipe = selectedRecipe.getParcelableArrayList(SELECTED_RECIPES);
+            if (getIntent().hasExtra(SELECTED_RECIPES) && getIntent() != null) {
+                Bundle selectedRecipe = getIntent().getExtras();
+                recipe = selectedRecipe.getParcelableArrayList(SELECTED_RECIPES);
 
-            final RecipeDetailFragment firstfragment = new RecipeDetailFragment();
-            firstfragment.setArguments(selectedRecipe);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, firstfragment)
-                    .commit();
-
-            if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
-
-                final RecipeStepDetailFragment secondfragment = new RecipeStepDetailFragment();
-                secondfragment.setArguments(selectedRecipe);
+                final RecipeDetailFragment firstfragment = new RecipeDetailFragment();
+                firstfragment.setArguments(selectedRecipe);
+                FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container2, secondfragment)
+                        .replace(R.id.fragment_container, firstfragment)
                         .commit();
+
+                if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
+
+                    final RecipeStepDetailFragment secondfragment = new RecipeStepDetailFragment();
+                    secondfragment.setArguments(selectedRecipe);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container2, secondfragment)
+                            .commit();
+                }
             }
+
         } else {
             recipe = savedInstanceState.getParcelableArrayList(SELECTED_RECIPES);
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -82,7 +86,7 @@ public class DetailActivity extends AppCompatActivity implements RecipeStepAdapt
         }
         recipeName = recipe.get(0).getName();
 
-        if (toolbar!=null){
+        if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -125,7 +129,7 @@ public class DetailActivity extends AppCompatActivity implements RecipeStepAdapt
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-         if(getFragmentManager().getBackStackEntryCount() > 0){
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
         }
     }
