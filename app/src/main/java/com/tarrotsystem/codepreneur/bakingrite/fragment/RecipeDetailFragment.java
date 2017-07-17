@@ -77,7 +77,7 @@ public class RecipeDetailFragment extends Fragment {
         if (savedInstanceState!=null){
             recipes = savedInstanceState.getParcelableArrayList(SELECTED_RECIPES);
             mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
-
+            linearLayoutManager.onRestoreInstanceState(mListState);
         }else{
             recipes = getArguments().getParcelableArrayList(SELECTED_RECIPES);
         }
@@ -143,17 +143,19 @@ public class RecipeDetailFragment extends Fragment {
     public void onSaveInstanceState(Bundle currentState) {
         super.onSaveInstanceState(currentState);
         currentState.putParcelableArrayList(SELECTED_RECIPES, recipes);
-        // Save list state
-        mListState = linearLayoutManager.onSaveInstanceState();
-        currentState.putParcelable(LIST_STATE_KEY, mListState);
+        currentState.putParcelable(LIST_STATE_KEY, stepsRecycler.getLayoutManager().onSaveInstanceState());
+
     }
 
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Retrieve list state and list/item positions
-        if(savedInstanceState != null)
-            mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if(savedInstanceState != null) {
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+            stepsRecycler.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
     }
 
 

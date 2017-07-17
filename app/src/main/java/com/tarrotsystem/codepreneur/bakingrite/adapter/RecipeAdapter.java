@@ -2,6 +2,7 @@ package com.tarrotsystem.codepreneur.bakingrite.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         holder.txtRecipeName.setText(mRecipes.get(position).getName());
 
-        if (mRecipes.get(position).getImage().isEmpty()){
+        if (TextUtils.isEmpty(mRecipes.get(position).getImage())){
             Picasso.with(mContext).load(RecipeUtils.getImageById(mRecipes.get(position).getId())).into(holder.txtRecipeImage);
         }else{
             Picasso.with(mContext).load(mRecipes.get(position).getImage()).into(holder.txtRecipeImage);

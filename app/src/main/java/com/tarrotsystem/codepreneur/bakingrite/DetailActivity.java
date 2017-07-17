@@ -69,11 +69,6 @@ public class DetailActivity extends AppCompatActivity implements RecipeStepAdapt
             recipe = savedInstanceState.getParcelableArrayList(SELECTED_RECIPES);
             FragmentManager fragmentManager = getSupportFragmentManager();
 
-            final RecipeDetailFragment firstfragment = new RecipeDetailFragment();
-            firstfragment.setArguments(savedInstanceState);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, firstfragment)
-                    .commit();
 
             if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
                 final RecipeStepDetailFragment secondfragment = new RecipeStepDetailFragment();

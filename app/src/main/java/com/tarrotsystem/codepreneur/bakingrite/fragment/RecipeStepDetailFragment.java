@@ -110,10 +110,6 @@ public class RecipeStepDetailFragment extends Fragment {
     }
 
 
-    public RecipeStepDetailFragment(){
-
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -206,7 +202,8 @@ public class RecipeStepDetailFragment extends Fragment {
         }else {
             initializePlayer(Uri.parse(videoUrl));
             if (isLandscapeMode(getContext())){
-               description.setVisibility(View.GONE);
+                description.setVisibility(View.GONE);
+
 
                 if (bottomNavigationView!=null)
                     bottomNavigationView.setVisibility(View.GONE);

@@ -3,6 +3,7 @@ package com.tarrotsystem.codepreneur.bakingrite.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ public class RecipeStepAdapter  extends RecyclerView.Adapter<RecipeStepAdapter.R
         public void onBindViewHolder(RecipeStepAdapter.RecyclerViewHolder holder, int position) {
             holder.stepShortDesc.setText(mSteps.get(position).getShortDescription());
 
-            if (mSteps.get(position).getThumbnailURL().isEmpty()){
+            if (TextUtils.isEmpty(mSteps.get(position).getThumbnailURL())){
                 Picasso.with(mContext).load(RecipeUtils.getImageById(mSteps.get(position).getId())).into(holder.stepImage);
             }else{
                 Picasso.with(mContext).load(mSteps.get(position).getThumbnailURL()).into(holder.stepImage);
