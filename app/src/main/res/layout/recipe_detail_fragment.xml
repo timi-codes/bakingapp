@@ -65,6 +65,7 @@
         android:src="@drawable/ingredients"
         android:tint="@android:color/white"
         app:fabSize="normal"
+        android:contentDescription="viewnot"
         app:layout_anchor="@id/collapsingtbl"
         app:layout_anchorGravity="bottom|end"
         app:layout_behavior="com.tarrotsystem.codepreneur.bakingrite.utils.ScrollAwareFABBehavior"/>

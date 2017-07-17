@@ -84,13 +84,17 @@ public class DetailActivity extends AppCompatActivity implements RecipeStepAdapt
             }
 
         }
-        recipeName = recipe.get(0).getName();
+        if (recipe.size()>0){
+            recipeName = recipe.get(0).getName();
+
+
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("How To Make " + recipeName + " Recipe");
+        }
         }
 
     }

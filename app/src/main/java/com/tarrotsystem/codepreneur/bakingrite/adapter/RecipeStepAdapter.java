@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.tarrotsystem.codepreneur.bakingrite.R;
 import com.tarrotsystem.codepreneur.bakingrite.model.Step;
 import com.tarrotsystem.codepreneur.bakingrite.utils.RecipeUtils;
@@ -52,14 +53,11 @@ public class RecipeStepAdapter  extends RecyclerView.Adapter<RecipeStepAdapter.R
         public void onBindViewHolder(RecipeStepAdapter.RecyclerViewHolder holder, int position) {
             holder.stepShortDesc.setText(mSteps.get(position).getShortDescription());
 
-           /* try {
-                Bitmap bitmap = RecipeUtils.retriveVideoFrameFromVideo(mSteps.get(position).getVideoURL());
-                holder.stepImage.setImageBitmap(bitmap);
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
+            if (mSteps.get(position).getThumbnailURL().isEmpty()){
+                Picasso.with(mContext).load(RecipeUtils.getImageById(mSteps.get(position).getId())).into(holder.stepImage);
+            }else{
+                Picasso.with(mContext).load(mSteps.get(position).getThumbnailURL()).into(holder.stepImage);
             }
-*/
-
         }
 
         @Override
